@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Trade Opportunities Analyzer</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #bcdbf8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: rgb(250, 248, 248);
+            padding: 30px;
+            border-radius: 10px;
+            width: 400px;
+            box-shadow: 0 4px 10px rgba(1, 1, 1, 0.1);
+        }
+
+        input,
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            background: #032448;
+            color: white;
+            cursor: pointer;
+        }
+
+        .output {
+            margin-top: 15px;
+            padding: 10px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h2>Trade Analyzer</h2>
+
+        <input id="sector" placeholder="Enter sector (e.g. pharmaceuticals)">
+        <button onclick="analyze()">Analyze</button>
+
+        <div id="result" class="output">Result will appear here...</div>
+    </div>
+
+    <script>
+        async function analyze() {
+
+            const sector = document.getElementById("sector").value;
+
+            if (!sector) {
+                alert("Please enter sector");
+                return;
+            }
+
+            try {
+                const response = await fetch(`http://127.0.0.1:8000/analyze/${sector}`, {
+                    method: "GET",
+                    headers: {
+                        "x-api-key": "mysecurekey"
+                    }
+                });
+
+                const data = await response.json();
+
+                document.getElementById("result").innerText =
+                    data.report || data.error || "No response";
+
+            } catch (error) {
+                document.getElementById("result").innerText = "Error connecting to API";
+            }
+        }
+    </script>
+
+</body>
+
+</html>
